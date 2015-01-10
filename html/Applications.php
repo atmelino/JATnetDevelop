@@ -10,28 +10,21 @@
 		<tbody>
 			<tr>
 				<td>Orbit Viewer<br> <a
-					href="http://<?php echo $_SERVER['SERVER_ADDR'];?>:8080/JATServlet/orbitViewer/orbitViewer.html"
+					href="http://<?php echo $_SERVER['SERVER_ADDR'];?>:8080/JATnetDevelop/orbitViewer/orbitViewer.html"
 					style="color: rgb(0, 98, 160); text-decoration: underline;" target="_parent"><img alt=""
 						src="images/orbitViewer.png" style="width: 300px;" /> </a>
 				</td>
-				<td>Orbit Viewer<br> <a
-					href="http://<?php echo $_SERVER['SERVER_ADDR'];?>:8080/JATServlet/JS3DPlot/JS3DPlot_orbit02.html"
+				<td>Orbit Viewer (without Tomcat)<br> <a
+					href="../WebContent/orbitViewer/orbitViewer.html"
 					style="color: rgb(0, 98, 160); text-decoration: underline;" target="_parent"><img alt=""
-						src="images/orbitViewerJS3DPlot.png" style="width: 300px;" /> </a>
-				</td>
-			</tr>
+						src="images/orbitViewer.png" style="width: 300px;" /> </a></td>
+				</tr>
 			<tr>
 				<td></td>
 				<td></td>
 			</tr>
 		</tbody>
 	</table>
-	<p>
-		<a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>:8080/JATServlet" target="_parent">Web Apps</a>
-	</p>
-	<p>
-		<a href="develop/WebAppsDevelop.html" target="iframe_a">Web Apps Develop</a>
-	</p>
 
 	<h2>Java Applications</h2>
 	<p>

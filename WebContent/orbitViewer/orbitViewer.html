@@ -130,7 +130,7 @@
 			ta : 10, // numeric slider
 			add : makeOrbit,
 			clear : clearOrbits,
-			autoRotate : false, // boolean (checkbox)
+			autoRotate : true, // boolean (checkbox)
 			opacity : 0.8, // numeric slider
 			satScale : 100,
 			background : "Stars",
@@ -248,11 +248,13 @@
 	function onDocumentMouseDown(event) {
 		//console.log("Click.");
 
-		controls.autoRotate = false;
-		parameters.autoRotate = false;
-		// Iterate over all controllers
-		for ( var i in gui.__controllers) {
-			gui.__controllers[i].updateDisplay();
+		if (false) {
+			controls.autoRotate = false;
+			parameters.autoRotate = false;
+			// Iterate over all controllers
+			for ( var i in gui.__controllers) {
+				gui.__controllers[i].updateDisplay();
+			}
 		}
 	}
 
