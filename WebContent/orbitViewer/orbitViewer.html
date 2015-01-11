@@ -59,7 +59,7 @@
 	var autoRotateCB;
 	var lines = new Array();
 	var satellite;
-	var satScale = 100;
+	var satScale = 400;
 
 	function setup() {
 		// initialization
@@ -116,7 +116,7 @@
 
 		// LIGHT
 		var light = new THREE.PointLight(0xffffff);
-		light.position.set(0, 250, 0);
+		light.position.set(1000,20000, 20000);
 		scene.add(light);
 
 		// GUI
@@ -132,7 +132,7 @@
 			clear : clearOrbits,
 			autoRotate : true, // boolean (checkbox)
 			opacity : 0.8, // numeric slider
-			satScale : 100,
+			satScale : 400,
 			background : "Stars",
 		};
 		gui.add(parameters, 'a').min(6000).max(50000).step(1).name('Semimajor Axis [km]');
@@ -190,7 +190,7 @@
 			depthWrite : false,
 			side : THREE.BackSide
 		});
-		var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+		//var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
 		scene.add(skyBox);
 
 		////////////
@@ -228,6 +228,7 @@
 		var material = new THREE.MeshFaceMaterial(materials);
 		satellite = new THREE.Mesh(geometry, material);
 		satellite.scale.set(satScale, satScale, satScale);
+		satellite.rotation.y = Math.PI;
 		//satellite.position.set(0, 30, 0);
 
 		// 		z = 1126.5079268573745;
@@ -313,7 +314,8 @@
 			}
 			lineGeometry.computeLineDistances();
 			var lineMaterial = new THREE.LineBasicMaterial({
-				color : 0xcc0000
+				color : 0xcc0000,
+				linewidth: 3,
 			});
 			var index = lines.length;
 			//console.log("index=" + index);
