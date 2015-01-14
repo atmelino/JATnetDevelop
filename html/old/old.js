@@ -1,4 +1,36 @@
 
+		if (false) {
+		var sphereGeo = new THREE.SphereGeometry(earthRadius, segments, segments);
+
+			var colors = THREE.ImageUtils.loadTexture("../lib/images/earth-day.jpg");
+			// 		var colors = THREE.ImageUtils.loadTexture("../lib/images/land_ocean_ice_cloud_2048.jpg");
+			var earthMaterial = new THREE.MeshLambertMaterial({
+				color : 0xffffff,
+				map : colors,
+				transparent : true,
+				opacity : 0.8
+			});
+			earthSphere = new THREE.Mesh(sphereGeo, earthMaterial);
+			scene.add(earthSphere);
+		}
+		
+		
+
+
+		if (false) {
+			var sphereGeo = new THREE.SphereGeometry(radius + 1, 64, 32);
+			var colors = THREE.ImageUtils.loadTexture("../lib/images/earthNight4K.jpg");
+			var earthMaterialNight = new THREE.MeshLambertMaterial({
+				//color : 0xffffff,
+				map : colors,
+				transparent : true,
+				opacity : 0.3,
+				//emissive : 0xffffff,
+				emissive : 0xcccccc,
+			});
+			earthSphereNight = new THREE.Mesh(sphereGeo, earthMaterialNight);
+			scene.add(earthSphereNight);
+		}
 
 			// document.getElementById('iframe_a').contentWindow.scrollTo(0,500);
 			// this.contentWindow.document.documentElement.scrollTop=0;

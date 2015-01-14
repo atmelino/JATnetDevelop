@@ -49,7 +49,7 @@
 
 	// custom global variables
 	var cube;
-	var radius = 6370;
+	var earthRadius = 6370;
 	var gridSize = 10000;
 	//var radius = 100;
 	//var gridSize = 200;
@@ -59,6 +59,9 @@
 	var autoRotateCB;
 	var earthSphere;
 	var earthSphereNight;
+	var clouds;
+	// Earth params
+	var segments = 32, rotation = 6;
 	var lines = new Array();
 	var satellite;
 	var satScale = 400;
@@ -82,8 +85,7 @@
 		var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 1000 * gridSize;
 		camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 		scene.add(camera);
-		camera.position.set(radius * 5, 3.5 * radius, 4 * radius);
-		//camera.position.set([radius * 5, 3.5 * radius, 4 * radius]);
+		camera.position.set(earthRadius * 5, 3.5 * earthRadius, 4 * earthRadius);
 		camera.lookAt(scene.position);
 
 		// RENDERER
@@ -120,6 +122,7 @@
 		var light = new THREE.PointLight(0xffffff);
 		light.position.set(1000, 20000, 20000);
 		scene.add(light);
+		scene.add(new THREE.AmbientLight(0x333333));
 
 		// GUI
 		gui = new dat.GUI();
@@ -195,6 +198,10 @@
 		//var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
 		scene.add(skyBox);
 
+		var stars = createStars(gridSize*10, 64);
+		scene.add(stars);
+
+		
 		////////////
 		// CUSTOM //
 		////////////
@@ -202,29 +209,14 @@
 		document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 		// Create the Earth with nice texture
-		var sphereGeo = new THREE.SphereGeometry(radius, 64, 32);
-		var colors = THREE.ImageUtils.loadTexture("../lib/images/earth-day.jpg");
-		var earthMaterial = new THREE.MeshLambertMaterial({
-			color : 0xffffff,
-			map : colors,
-			transparent : true,
-			opacity : 0.8
-		});
-		earthSphere = new THREE.Mesh(sphereGeo, earthMaterial);
+		
+		earthSphere = createSphere(earthRadius, segments);
+		earthSphere.rotation.y = rotation;
 		scene.add(earthSphere);
 
-		var sphereGeo = new THREE.SphereGeometry(radius + 1, 64, 32);
-		var colors = THREE.ImageUtils.loadTexture("../lib/images/earthNight4K.jpg");
-		var earthMaterialNight = new THREE.MeshLambertMaterial({
-			//color : 0xffffff,
-			map : colors,
-			transparent : true,
-			opacity : 0.3,
-			//emissive : 0xffffff,
-			emissive : 0xcccccc,
-		});
-		earthSphereNight = new THREE.Mesh(sphereGeo, earthMaterialNight);
-		scene.add(earthSphereNight);
+		clouds = createClouds(earthRadius, segments);
+		clouds.rotation.y = rotation;
+		scene.add(clouds);
 
 		var jsonLoader = new THREE.JSONLoader();
 		jsonLoader.load("../models/triana.json", addModelToScene);
@@ -237,6 +229,32 @@
 		//scene.add(axes);
 		//makeAxisLabel(scene, true);
 
+	}
+	function createSphere(radius, segments) {
+		return new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), new THREE.MeshPhongMaterial({
+			map : THREE.ImageUtils.loadTexture('../lib/images/earth-day2K.jpg'),
+			bumpMap : THREE.ImageUtils.loadTexture('../lib/images/elev_bump_2k.jpg'),
+			bumpScale : 0.005,
+			specularMap : THREE.ImageUtils.loadTexture('../lib/images/water_4k.png'),
+			specular : new THREE.Color('grey')
+		}));
+	}
+
+	function createClouds(radius, segments) {
+		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius*1.01, segments, segments), new THREE.MeshPhongMaterial({
+			map : THREE.ImageUtils.loadTexture('../lib/images/earth-map-clouds2k.jpg'),
+			//				map : THREE.ImageUtils.loadTexture('images/earth-clouds2k.jpg'),
+			//map : THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
+			transparent : true,
+			opacity : 0.25,
+		}));
+	}
+
+	function createStars(radius, segments) {
+		return new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), new THREE.MeshBasicMaterial({
+			map : THREE.ImageUtils.loadTexture('../lib/images/galaxy_starfield.png'),
+			side : THREE.BackSide
+		}));
 	}
 
 	function addModelToScene(geometry, materials) {
@@ -285,8 +303,9 @@
 			// do something
 		}
 
-		earthSphere.rotation.y += 0.0001;
-		earthSphereNight.rotation.y += 0.0001;
+		earthSphere.rotation.y += 0.0002;
+		clouds.rotation.y += 0.0002;
+		//earthSphereNight.rotation.y += 0.0001;
 		controls.update();
 		stats.update();
 	}
