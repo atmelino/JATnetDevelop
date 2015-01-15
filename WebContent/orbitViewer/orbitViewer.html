@@ -157,13 +157,19 @@
 		var opacity = gui.add(parameters, 'opacity').min(0).max(1).step(0.01).name('Opacity').listen();
 		opacity.onChange(function(value) {
 			earthSphere.material.opacity = value;
+			clouds.material.opacity = value - 0.6;
 		});
+
+		var bgList = [ "Color", "Stars", "Sky" ];
+		gui.add(parameters, 'background', bgList).name('background').listen().onFinishChange(function(value) {
+			console.log('example');
+		});
+
 		var satScale = gui.add(parameters, 'satScale').min(1).max(1000).step(1).name('satellite scale').listen();
 		satScale.onChange(function(value) {
 			satellite.scale.set(value, value, value);
 		});
-		var bgList = [ "Color", "Stars", "Sky" ];
-		gui.add(parameters, 'background', bgList).name('background');
+
 
 		gui.open();
 
@@ -198,10 +204,9 @@
 		//var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
 		scene.add(skyBox);
 
-		var stars = createStars(gridSize*10, 64);
+		var stars = createStars(gridSize * 10, 64);
 		scene.add(stars);
 
-		
 		////////////
 		// CUSTOM //
 		////////////
@@ -209,7 +214,7 @@
 		document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 		// Create the Earth with nice texture
-		
+
 		earthSphere = createSphere(earthRadius, segments);
 		earthSphere.rotation.y = rotation;
 		scene.add(earthSphere);
@@ -236,12 +241,14 @@
 			bumpMap : THREE.ImageUtils.loadTexture('../lib/images/elev_bump_2k.jpg'),
 			bumpScale : 0.005,
 			specularMap : THREE.ImageUtils.loadTexture('../lib/images/water_4k.png'),
-			specular : new THREE.Color('grey')
+			specular : new THREE.Color('grey'),
+			transparent : true,
+			opacity : 0.8,
 		}));
 	}
 
 	function createClouds(radius, segments) {
-		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius*1.01, segments, segments), new THREE.MeshPhongMaterial({
+		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius * 1.01, segments, segments), new THREE.MeshPhongMaterial({
 			map : THREE.ImageUtils.loadTexture('../lib/images/earth-map-clouds2k.jpg'),
 			//				map : THREE.ImageUtils.loadTexture('images/earth-clouds2k.jpg'),
 			//map : THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
