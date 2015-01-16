@@ -161,8 +161,10 @@
 		});
 
 		var bgList = [ "Color", "Stars", "Sky" ];
-		gui.add(parameters, 'background', bgList).name('background').listen().onFinishChange(function(value) {
-			console.log('example');
+		gui.add(parameters, 'background', bgList).name('background').onChange(function(value) {
+			console.log(value);
+			scene.remove(stars);
+			scene.add(nebulaBox);
 		});
 
 		var satScale = gui.add(parameters, 'satScale').min(1).max(1000).step(1).name('satellite scale').listen();
@@ -170,17 +172,16 @@
 			satellite.scale.set(value, value, value);
 		});
 
-
 		gui.open();
 
-		// SKYBOX/FOG
-		var skyBoxGeometry = new THREE.CubeGeometry(1000 * gridSize, 1000 * gridSize, 1000 * gridSize);
-		var skyBoxMaterial = new THREE.MeshBasicMaterial({
+		// nebulaBox/FOG
+		var nebulaBoxGeometry = new THREE.CubeGeometry(1000 * gridSize, 1000 * gridSize, 1000 * gridSize);
+		var nebulaBoxMaterial = new THREE.MeshBasicMaterial({
 			color : 0x9999ff,
 			side : THREE.BackSide
 		});
-		var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-		//scene.add(skyBox);
+		var nebulaBox = new THREE.Mesh(nebulaBoxGeometry, nebulaBoxMaterial);
+		//scene.add(nebulaBox);
 		//scene.fog = new THREE.FogExp2(0x9999ff, 0.00025);
 
 		// SPACEBOX
@@ -194,15 +195,15 @@
 		var textureCube = THREE.ImageUtils.loadTextureCube(imageURLs);
 		var shader = THREE.ShaderLib["cube"];
 		shader.uniforms["tCube"].value = textureCube;
-		var skyMaterial = new THREE.ShaderMaterial({
+		var nebulaMaterial = new THREE.ShaderMaterial({
 			fragmentShader : shader.fragmentShader,
 			vertexShader : shader.vertexShader,
 			uniforms : shader.uniforms,
 			depthWrite : false,
 			side : THREE.BackSide
 		});
-		//var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
-		scene.add(skyBox);
+		var nebulaBox = new THREE.Mesh(skyGeometry, nebulaMaterial);
+		//scene.add(nebulaBox);
 
 		var stars = createStars(gridSize * 10, 64);
 		scene.add(stars);
@@ -263,19 +264,14 @@
 			side : THREE.BackSide
 		}));
 	}
+	
+	
 
 	function addModelToScene(geometry, materials) {
 		var material = new THREE.MeshFaceMaterial(materials);
 		satellite = new THREE.Mesh(geometry, material);
 		satellite.scale.set(satScale, satScale, satScale);
 		satellite.rotation.y = Math.PI;
-		//satellite.position.set(0, 30, 0);
-
-		// 		z = 1126.5079268573745;
-		// 		y = 3989.067891143869;
-		// 		x = 7340.005746153715;
-		// 		satellite.position.set(y, z, x);
-
 		scene.add(satellite);
 	}
 

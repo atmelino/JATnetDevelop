@@ -1,4 +1,22 @@
 
+	
+	var BGChanger = function() {
+		console.log('example');
+	}
+	//gui.add(parameters, 'background', bgList).name('background').onChange(BGChanger);
+
+
+
+
+		//satellite.position.set(0, 30, 0);
+
+		// 		z = 1126.5079268573745;
+		// 		y = 3989.067891143869;
+		// 		x = 7340.005746153715;
+		// 		satellite.position.set(y, z, x);
+
+
+
 		if (false) {
 		var sphereGeo = new THREE.SphereGeometry(earthRadius, segments, segments);
 
