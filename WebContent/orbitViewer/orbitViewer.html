@@ -160,11 +160,21 @@
 			clouds.material.opacity = value - 0.6;
 		});
 
-		var bgList = [ "Color", "Stars", "Sky" ];
+		var bgList = [ "Blue", "Stars", "Nebula" ];
 		gui.add(parameters, 'background', bgList).name('background').onChange(function(value) {
 			console.log(value);
-			scene.remove(stars);
-			scene.add(nebulaBox);
+			if (value == 'Blue') {
+				scene.remove(stars);
+				scene.remove(nebulaBox);
+			}
+			if (value == 'Stars') {
+				scene.remove(nebulaBox);
+				scene.add(stars);
+			}
+			if (value == 'Nebula') {
+				scene.remove(stars);
+				scene.add(nebulaBox);
+			}
 		});
 
 		var satScale = gui.add(parameters, 'satScale').min(1).max(1000).step(1).name('satellite scale').listen();
@@ -174,15 +184,6 @@
 
 		gui.open();
 
-		// nebulaBox/FOG
-		var nebulaBoxGeometry = new THREE.CubeGeometry(1000 * gridSize, 1000 * gridSize, 1000 * gridSize);
-		var nebulaBoxMaterial = new THREE.MeshBasicMaterial({
-			color : 0x9999ff,
-			side : THREE.BackSide
-		});
-		var nebulaBox = new THREE.Mesh(nebulaBoxGeometry, nebulaBoxMaterial);
-		//scene.add(nebulaBox);
-		//scene.fog = new THREE.FogExp2(0x9999ff, 0.00025);
 
 		// SPACEBOX
 		var imagePrefix = "../lib/images/nebula-";
@@ -264,8 +265,6 @@
 			side : THREE.BackSide
 		}));
 	}
-	
-	
 
 	function addModelToScene(geometry, materials) {
 		var material = new THREE.MeshFaceMaterial(materials);

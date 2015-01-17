@@ -1,8 +1,8 @@
 body {
 	font-family: Monospace;
-	font-weight: bold; //
+	font-weight: bold; 
 	background-color: #ccccff;
-	//background-color: #000000;
+/* 	background-color: #000000; */
 	margin: 0px;
 	overflow: hidden;
 	top: 0;
