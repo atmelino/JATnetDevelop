@@ -34,6 +34,7 @@
 <script src="../lib/js/extra/grid.js"></script>
 <script src="../lib/js/extra/axisLabels.js"></script>
 <script src="../lib/js/extra/colors.js"></script>
+<script src="../lib/js/extra/functions.js"></script>
 
 <!-- Coordinate order has been changed to reflect OpenGL default: -->
 <!-- first coordinate is y -->
@@ -184,7 +185,6 @@
 
 		gui.open();
 
-
 		// SPACEBOX
 		var imagePrefix = "../lib/images/nebula-";
 		var directions = [ "xpos", "xneg", "ypos", "yneg", "zpos", "zneg" ];
@@ -326,7 +326,7 @@
 		var ta = parameters.ta;
 		//console.log("SemimajorAxis=" + SemimajorAxis);
 
-		$.post('/JATnetDevelop/OrbitViewer', {
+		$.post('/JATnetDevelop/SunPosition', {
 			SemimajorAxis : SemimajorAxis,
 			Eccentricity : Eccentricity,
 			Inclination : Inclination,
@@ -335,10 +335,15 @@
 			ta : ta,
 		}, function(responseText) {
 
+			printlnMessage('messages', 'clicked');
+
+			
 			var obj = JSON.parse(responseText);
 			//printlnMessage('messages', JSON.stringify(obj));
 			//printlnMessage('messages', obj.coords.x[0]);
 			//printlnMessage('messages', JSON.stringify(obj.TBE));
+			printlnMessage('messages', "sun azimuth="+JSON.stringify(obj.azimuth));
+			printlnMessage('messages', "sun altitude="+JSON.stringify(obj.altitude));
 			console.log(JSON.stringify(obj.TBE));
 			console.log(JSON.stringify(obj.pos));
 
@@ -388,13 +393,19 @@
 
 </head>
 <body onLoad="setup();">
+	<div id='messagesDiv'>
+		<!--<textarea id="messages" style="width: 90%;"></textarea>-->
+		<textarea id="messages" cols=80; rows=3;></textarea>
+		<!-- cols=60 rows=10 -->
+	</div>
 	<div id="infoButton"></div>
 	<div id="infoBox" title="Information">
 		Java Astrodynamics Toolkit<br>Drag mouse to rotate scene<br>mouse wheel to zoom
 	</div>
 	<!-- ------------------------------------------------------------ -->
 
-	<div id="ThreeJS" style="position: absolute; left: 0px; top: 0px"></div>
+<!-- 	<div id="ThreeJS" style="position: absolute; left: 0px; top: 0px"></div> -->
+	<div id="ThreeJS"></div>
 
 </body>
 </html>

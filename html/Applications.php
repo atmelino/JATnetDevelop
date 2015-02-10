@@ -20,8 +20,15 @@
 						src="images/orbitViewer.png" style="width: 300px;" /> </a></td>
 				</tr>
 			<tr>
-				<td></td>
-				<td></td>
+				<td>Sun Position<br> <a
+					href="http://<?php echo $_SERVER['SERVER_ADDR'];?>:8080/JATnetDevelop/sunPosition/sunPosition.html"
+					style="color: rgb(0, 98, 160); text-decoration: underline;" target="_parent"><img alt=""
+						src="images/sunPosition.png" style="width: 300px;" /> </a></td>
+				<td>Sun Position (without Tomcat)<br> <a
+					href="../WebContent/sunPosition/sunPosition.html"
+					style="color: rgb(0, 98, 160); text-decoration: underline;" target="_parent"><img alt=""
+						src="images/sunPosition.png" style="width: 300px;" /> </a></td>
+				</td>
 			</tr>
 		</tbody>
 	</table>

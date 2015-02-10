@@ -43,7 +43,7 @@
 	<div id='mainarea'>
 		<div id='messagesDiv'>
 			<!--<textarea id="messages" style="width: 90%;"></textarea>-->
-			<textarea id="messages" cols=80; rows=3"></textarea>
+			<textarea id="messages" cols=80; rows=3></textarea>
 			<!-- cols=60 rows=10 -->
 		</div>
 		<iframe width="100%" height=400px scrolling=no name="iframe_a" id="iframe_a" seamless="seamless"></iframe>

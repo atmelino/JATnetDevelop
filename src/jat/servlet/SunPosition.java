@@ -1,8 +1,12 @@
-package test;
+package jat.servlet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import jat.core.cm.TwoBodyAPL;
+import jat.core.coordinates.Angle;
+import jat.core.coordinates.AstroCoordinate;
+import jat.core.coordinates.AstroDateTimeLocation;
+import jat.core.coordinates.solarPositioning.SPA;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,9 +20,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.ode.FirstOrderIntegrator;
 import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator;
 
-@WebServlet("/TwoBodyParam")
-// defines a Servlet mapped to "/TwoBodyParam"
-public class TwoBodyParam extends HttpServlet {
+@WebServlet("/SunPosition")
+// defines a Servlet mapped to "/SunPosition"
+public class SunPosition extends HttpServlet {
 
 	private static final long serialVersionUID = -8693738797080608295L;
 
@@ -70,6 +74,20 @@ public class TwoBodyParam extends HttpServlet {
 		dp853.integrate(sat, 0.0, y, period, y); // now y contains final state at
 												// tf
 
+		
+		
+		AstroDateTimeLocation adt;
+		AstroCoordinate ac;
+
+		Angle longitude = new Angle(-97.733333, Angle.DEGREES);
+		Angle latitude = new Angle(30,17,0, Angle.ARCDEGREES);
+		adt = new AstroDateTimeLocation(2003, 3, 1, 0, 0, 0, "CST6CDT", longitude, latitude);
+		ac = SPA.getSolarPosition(adt, 1830.14, 67., 820., 11.);
+		double az=ac.horizontalCoord.azimuth.getDegrees();
+		double alt=ac.horizontalCoord.altitude.getDegrees();
+		
+		
+		
 		Double[] objArray = sat.time.toArray(new Double[sat.time.size()]);
 		double[] timeArray = ArrayUtils.toPrimitive(objArray);
 		double[] xsolArray = ArrayUtils.toPrimitive(sat.xsol
@@ -117,10 +135,13 @@ public class TwoBodyParam extends HttpServlet {
 		//obj.put("y", listy);
 		//obj.put("z", listz);
 		//obj.put("message", "hello");
-		obj.put("message", "TwoBodyParam.java");
+		obj.put("message", "SunPosition.java");
 		obj.put("TBE", TBE);
 		obj.put("pos", pos);
 
+		obj.put("azimuth", az);
+		obj.put("altitude", alt);
+		
 		
 		writer.write(""+obj);
 
