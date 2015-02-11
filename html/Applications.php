@@ -17,7 +17,7 @@
 				<td>Orbit Viewer (without Tomcat)<br> <a
 					href="../WebContent/orbitViewer/orbitViewer.html"
 					style="color: rgb(0, 98, 160); text-decoration: underline;" target="_parent"><img alt=""
-						src="images/orbitViewer.png" style="width: 300px;" /> </a></td>
+						src="images/orbitViewerNoTomcat.png" style="width: 300px;" /> </a></td>
 				</tr>
 			<tr>
 				<td>Sun Position<br> <a
