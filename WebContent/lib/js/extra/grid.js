@@ -20,7 +20,7 @@ function makeGrid(scene, zUp, gridSize) {
 	scene.add(gridYZ);
 
 	makeLabel(-gridSize, 1.2 * gridSize, -gridSize, -gridSize, -Math.PI / 2,0,0);
-	makeLabel("x [km]", 1.2 *gridSize, -gridSize, 0,  -Math.PI / 2,0,0);
+	makeLabel("x [km]", 1.2 *gridSize, -gridSize, 0,  -Math.PI / 2,0,Math.PI / 2);
 	makeLabel(gridSize, 1.2 *gridSize, -gridSize, gridSize, -Math.PI / 2,0,0);
 
 	makeLabel(-gridSize, -gridSize, -gridSize, 1.2 * gridSize, -Math.PI / 2, 0, Math.PI / 2);
