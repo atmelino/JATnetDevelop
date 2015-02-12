@@ -141,28 +141,36 @@
 			satScale : 400,
 			background : "Stars",
 		};
-		gui.add(parameters, 'a').min(6000).max(50000).step(1).name('Semimajor Axis [km]');
-		gui.add(parameters, 'ecc').min(0).max(1).step(0.01).name('Eccentricity');
-		gui.add(parameters, 'inc').min(0).max(180).step(0.1).name('Inclination');
-		gui.add(parameters, 'raan').min(0).max(180).step(0.1).name('RAAN');
-		gui.add(parameters, 'w').min(0).max(180).step(0.1).name('Perigee');
-		gui.add(parameters, 'ta').min(0).max(180).step(0.1).name('True Anomaly');
-		gui.add(parameters, 'add').name('Add Orbit');
-		gui.add(parameters, 'clear').name('Clear Orbit(s)');
+		var folder1 = gui.addFolder('Orbits');
+		folder1.add(parameters, 'a').min(6000).max(50000).step(1).name('Semimajor Axis [km]');
+		folder1.add(parameters, 'ecc').min(0).max(1).step(0.01).name('Eccentricity');
+		folder1.add(parameters, 'inc').min(0).max(180).step(0.1).name('Inclination');
+		folder1.add(parameters, 'raan').min(0).max(180).step(0.1).name('RAAN');
+		folder1.add(parameters, 'w').min(0).max(180).step(0.1).name('Perigee');
+		folder1.add(parameters, 'ta').min(0).max(180).step(0.1).name('True Anomaly');
+		folder1.add(parameters, 'add').name('Add Orbit');
+		folder1.add(parameters, 'clear').name('Clear Orbit(s)');
+		var satScale = folder1.add(parameters, 'satScale').min(1).max(1000).step(1).name('satellite scale').listen();
+		satScale.onChange(function(value) {
+			satellite.scale.set(value, value, value);
+		});
 		//gui.add(parameters, 'autoRotate').name('autoRotate');
-		autoRotateCB = gui.add(parameters, 'autoRotate').name('Rotate Scene').listen();
+
+		var folder2 = gui.addFolder('Effects');
+
+		autoRotateCB = folder2.add(parameters, 'autoRotate').name('Rotate Scene').listen();
 		autoRotateCB.onChange(function(value) {
 			//console.log(value);
 			controls.autoRotate = value;
 		});
-		var opacity = gui.add(parameters, 'opacity').min(0).max(1).step(0.01).name('Opacity').listen();
+		var opacity = folder2.add(parameters, 'opacity').min(0).max(1).step(0.01).name('Earth Opacity').listen();
 		opacity.onChange(function(value) {
 			earthSphere.material.opacity = value;
 			clouds.material.opacity = value - 0.6;
 		});
 
 		var bgList = [ "Blue", "Stars", "Nebula" ];
-		gui.add(parameters, 'background', bgList).name('background').onChange(function(value) {
+		folder2.add(parameters, 'background', bgList).name('background').onChange(function(value) {
 			console.log(value);
 			if (value == 'Blue') {
 				scene.remove(stars);
@@ -176,11 +184,6 @@
 				scene.remove(stars);
 				scene.add(nebulaBox);
 			}
-		});
-
-		var satScale = gui.add(parameters, 'satScale').min(1).max(1000).step(1).name('satellite scale').listen();
-		satScale.onChange(function(value) {
-			satellite.scale.set(value, value, value);
 		});
 
 		gui.open();
@@ -232,9 +235,9 @@
 
 		// create a set of coordinate axes to help orient user
 		//    specify length in pixels in each direction
-		//var axes = new THREE.AxisHelper(gridSize);
-		//scene.add(axes);
-		//makeAxisLabel(scene, true);
+		var axes = new THREE.AxisHelper(gridSize);
+		scene.add(axes);
+		makeAxisLabel(scene, true);
 
 	}
 	function createSphere(radius, segments) {
@@ -274,7 +277,7 @@
 		scene.add(satellite);
 	}
 
-	function zUp(x, y, z) {
+	function xyzToGL(x, y, z) {
 		zUpVec[0] = y;
 		zUpVec[1] = z;
 		zUpVec[2] = x;
@@ -337,13 +340,12 @@
 
 			printlnMessage('messages', 'clicked');
 
-			
 			var obj = JSON.parse(responseText);
 			//printlnMessage('messages', JSON.stringify(obj));
 			//printlnMessage('messages', obj.coords.x[0]);
 			//printlnMessage('messages', JSON.stringify(obj.TBE));
-			printlnMessage('messages', "sun azimuth="+JSON.stringify(obj.azimuth));
-			printlnMessage('messages', "sun altitude="+JSON.stringify(obj.altitude));
+			printlnMessage('messages', "sun azimuth=" + JSON.stringify(obj.azimuth));
+			printlnMessage('messages', "sun altitude=" + JSON.stringify(obj.altitude));
 			console.log(JSON.stringify(obj.TBE));
 			console.log(JSON.stringify(obj.pos));
 
@@ -389,6 +391,24 @@
 		// 			scene.remove(line);
 
 	}
+
+	$(function() {
+		//$("#datepicker").datepicker();
+		$("#datepicker").datepicker({
+			showButtonPanel : true,
+		});
+
+		$( "#datepicker" ).datepicker( "setDate", new Date());
+
+		$("#dateDiv").css({
+			"z-index" : "2",
+			"background" : "rgba(0,0,0,0)",
+			"opacity" : "0.9",
+			"position" : "absolute",
+			"top" : "4px",
+			"left" : "40px"
+		}) // adds CSS
+	});
 </script>
 
 </head>
@@ -398,14 +418,17 @@
 		<textarea id="messages" cols=80; rows=3;></textarea>
 		<!-- cols=60 rows=10 -->
 	</div>
+	<div id="dateDiv">
+		Date: <input type="text" id="datepicker">
+	</div>
 	<div id="infoButton"></div>
 	<div id="infoBox" title="Information">
 		Java Astrodynamics Toolkit<br>Drag mouse to rotate scene<br>mouse wheel to zoom
 	</div>
 	<!-- ------------------------------------------------------------ -->
 
-<!-- 	<div id="ThreeJS" style="position: absolute; left: 0px; top: 0px"></div> -->
-	<div id="ThreeJS"></div>
+	<div id="ThreeJS" style="position: absolute; left: 0px; top: 0px"></div>
+	<!-- 	<div id="ThreeJS"></div> -->
 
 </body>
 </html>

@@ -24,7 +24,7 @@ function makeGrid(scene, zUp, gridSize) {
 	makeLabel(gridSize, 1.2 *gridSize, -gridSize, gridSize, -Math.PI / 2,0,0);
 
 	makeLabel(-gridSize, -gridSize, -gridSize, 1.2 * gridSize, -Math.PI / 2, 0, Math.PI / 2);
-	makeLabel("y [km]", 0, -gridSize, 1.2 * gridSize, -Math.PI / 2, 0, Math.PI / 2);
+	makeLabel("y [km]", 0, -gridSize, 1.2 * gridSize, -Math.PI / 2, 0, 0);
 	makeLabel(gridSize, gridSize, -gridSize, 1.2 * gridSize, -Math.PI / 2, 0, Math.PI / 2);
 
 	makeLabel(-gridSize, -1.2 * gridSize, -gridSize, gridSize, 0,0,0);
