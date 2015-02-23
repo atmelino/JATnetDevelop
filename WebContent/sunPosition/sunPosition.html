@@ -5,7 +5,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <link rel=stylesheet href="../lib/css/base.css" />
-<link rel=stylesheet href="../lib/css/jquery-ui.css" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="../lib/js/jqueryPlugin/timepicker/jquery-ui-timepicker-addon.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../lib/js/jquery-ui-1.11.3/themes/smoothness/jquery-ui.css" />
 <link rel=stylesheet href="../lib/css/info.css" />
 
 <script src="../lib/js/Three.js"></script>
@@ -18,7 +20,8 @@
 <script src="../lib/js/THREEx.WindowResize.js"></script>
 <script src='../lib/js/DAT.GUI.min.js'></script>
 <script src="../lib/js/jquery-1.9.1.js"></script>
-<script src="../lib/js/jquery-ui.js"></script>
+<!-- <script src="../lib/js/jquery-ui.js"></script> -->
+<script src="../lib/js/jquery-ui-1.11.3/jquery-ui.min.js"></script>
 <script src="../lib/js/info.js"></script>
 <script src="../lib/fonts/gentilis_bold.typeface.js"></script>
 <script src="../lib/fonts/gentilis_regular.typeface.js"></script>
@@ -30,7 +33,9 @@
 <script src="../lib/fonts/droid_sans_bold.typeface.js"></script>
 <script src="../lib/fonts/droid_serif_regular.typeface.js"></script>
 <script src="../lib/fonts/droid_serif_bold.typeface.js"></script>
-
+<script src="../lib/js/jqueryPlugin/timepicker/jquery-ui-timepicker-addon.js"></script>
+<script src="../lib/js/jqueryPlugin/timepicker/i18n/jquery-ui-timepicker-addon-i18n.min.js"></script>
+<script src="../lib/js/jqueryPlugin/timepicker/jquery-ui-sliderAccess.js"></script>
 <script src="../lib/js/extra/grid.js"></script>
 <script src="../lib/js/extra/axisLabels.js"></script>
 <script src="../lib/js/extra/colors.js"></script>
@@ -40,6 +45,19 @@
 <!-- first coordinate is y -->
 <!-- second coordinate is z -->
 <!-- third coordinate is x -->
+
+
+<style>
+#toolbar {
+	padding: 4px;
+	display: inline-block;
+}
+/* support: IE7 */
+*+html #toolbar {
+	display: inline;
+}
+</style>
+
 
 <script>
 	// MAIN
@@ -66,6 +84,11 @@
 	var lines = new Array();
 	var satellite;
 	var satScale = 400;
+	var ex13;
+	var myDate;
+	var t;
+	var timer_is_on = 0;
+	var timeFactor = 1;
 
 	function setup() {
 		// initialization
@@ -73,6 +96,8 @@
 
 		// animation loop / game loop
 		animate();
+
+		timedCount();
 
 	}
 
@@ -392,13 +417,115 @@
 
 	}
 
+	function timedCount() {
+
+		if (document.getElementById('cbLive').checked)
+			ex13.datetimepicker('setDate', (new Date()));
+
+		if (!document.getElementById('cbStop').checked) {
+			myDate = ex13.datetimepicker('getDate');
+			//printlnMessage('messages', myDate);
+			myUTC = myDate.getTime();
+			printlnMessage('messages', myUTC);
+
+			//myDate.setTime(myUTC);
+			myDate.setTime(myUTC + timeFactor * 1000);
+
+			//myDate.setDate(myDate.getSeconds() + timeFactor);
+			ex13.datetimepicker('setDate', myDate);
+		}
+
+		t = setTimeout(function() {
+			timedCount()
+		}, 1000);
+	}
+
+	function doTimer() {
+		if (!timer_is_on) {
+			timer_is_on = 1;
+			timedCount();
+		}
+	}
+
+	function stopCount() {
+		clearTimeout(t);
+		timer_is_on = 0;
+	}
+
+	function rewind() {
+		printlnMessage('messages', 'rewind called');
+
+		if (timeFactor > 1)
+			timeFactor = timeFactor / 2;
+		else {
+			if (timeFactor == 1)
+				timeFactor = 0;
+			else {
+				if (timeFactor == 0)
+					timeFactor = -1;
+				else {
+					if (timeFactor <= -1)
+						timeFactor = timeFactor * 2;
+				}
+			}
+		}
+		document.getElementById('speed').value = timeFactor + "X";
+		$('#cbLive').prop('checked', false).button("refresh");
+		if (timeFactor == 0)
+			$('#cbStop').prop('checked', true).button("refresh");
+		else
+			$('#cbStop').prop('checked', false).button("refresh");
+	}
+
+	function forward() {
+		printlnMessage('messages', 'forward called');
+		if (timeFactor < -1)
+			timeFactor = timeFactor / 2;
+		else {
+			if (timeFactor == -1)
+				timeFactor = 0;
+			else {
+				if (timeFactor == 0)
+					timeFactor = 1;
+				else {
+					if (timeFactor >= 1)
+						timeFactor = timeFactor * 2;
+				}
+			}
+		}
+		document.getElementById('speed').value = timeFactor + "X";
+		$('#cbLive').prop('checked', false).button("refresh");
+		if (timeFactor == 0)
+			$('#cbStop').prop('checked', true).button("refresh");
+		else
+			$('#cbStop').prop('checked', false).button("refresh");
+	}
+
 	$(function() {
 		//$("#datepicker").datepicker();
-		$("#datepicker").datepicker({
-			showButtonPanel : true,
+		//$("#datepicker").datepicker({
+		//showButtonPanel : true,
+		//});
+
+		//$("#datepicker").datepicker("setDate", new Date());
+
+		ex13 = $('#basic_example_1');
+
+		ex13.datetimepicker({
+			timeFormat : 'HH:mm:ss z',
+			stepHour : 1,
+			stepMinute : 1,
+			stepSecond : 1,
+			hourGrid : 4,
+			minuteGrid : 10,
+			secondGrid : 10,
+			showOn : "button",
+			buttonImage : "icons/calendar16x16.gif",
+			buttonImageOnly : true,
+			buttonText : "Select date",
 		});
 
-		$( "#datepicker" ).datepicker( "setDate", new Date());
+		ex13.datetimepicker('setDate', (new Date()));
 
 		$("#dateDiv").css({
 			"z-index" : "2",
@@ -408,6 +535,22 @@
 			"top" : "4px",
 			"left" : "40px"
 		}) // adds CSS
+
+		$("#repeat").buttonset();
+		$("input[name='repeat']").on("change", function() {
+			//alert(this.id);
+			if (this.id == 'cbStop') {
+				timeFactor = 0;
+				document.getElementById('speed').value = timeFactor + "X";
+				//document.getElementById('speed').value = "0X";
+			}
+			if (this.id == 'cbLive') {
+				timeFactor = 1;
+				document.getElementById('speed').value = timeFactor + "X";
+				//document.getElementById('speed').value = "1X";
+			}
+		});
+
 	});
 </script>
 
@@ -418,9 +561,25 @@
 		<textarea id="messages" cols=80; rows=3;></textarea>
 		<!-- cols=60 rows=10 -->
 	</div>
+	<!-- 	<div id="dateDiv"> -->
+	<!-- 		Date: <input type="text" id="datepicker"> -->
+	<!-- 	</div> -->
+
 	<div id="dateDiv">
-		Date: <input type="text" id="datepicker">
+		<input type="text" name="basic_example_1" id="basic_example_1" size="26" /> <span id="repeat"> <input
+			type="radio" id="cbLive" name="repeat" checked="checked" /><label for="cbLive">LIVE</label>
+			<button onclick="rewind()">
+				<img src="icons/Rewind12.gif" />
+			</button> <!-- 			<input type="radio" id="cbStop" name="repeat" checked="checked" /><label for="cbStop"><img --> <input
+			type="radio" id="cbStop" name="repeat" /><label for="cbStop"><img src="icons/Stop12.gif" /></label>
+			<button onclick="forward()">
+				<img src="icons/FastForward12.gif" />
+			</button>
+		</span> <input type="text" name="speed" id="speed" value="1X" size="4" />
 	</div>
+
+
+
 	<div id="infoButton"></div>
 	<div id="infoBox" title="Information">
 		Java Astrodynamics Toolkit<br>Drag mouse to rotate scene<br>mouse wheel to zoom
