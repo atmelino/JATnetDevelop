@@ -89,6 +89,7 @@
 	var t;
 	var timer_is_on = 0;
 	var timeFactor = 1;
+	var animateCounter = 0;
 
 	function setup() {
 		// initialization
@@ -338,6 +339,9 @@
 		//earthSphereNight.rotation.y += 0.0001;
 		controls.update();
 		stats.update();
+
+		printlnMessage('messages', 'animate called '+animateCounter++);
+
 	}
 
 	function render() {
@@ -536,6 +540,15 @@
 			"left" : "40px"
 		}) // adds CSS
 
+		$("#messagesDiv").css({
+			"z-index" : "2",
+			"background" : "rgba(0,0,0,0)",
+			"opacity" : "0.9",
+			"position" : "absolute",
+			"top" : "40px",
+			"left" : "40px"
+		}) // adds CSS
+
 		$("#repeat").buttonset();
 		$("input[name='repeat']").on("change", function() {
 			//alert(this.id);
@@ -557,13 +570,8 @@
 </head>
 <body onLoad="setup();">
 	<div id='messagesDiv'>
-		<!--<textarea id="messages" style="width: 90%;"></textarea>-->
 		<textarea id="messages" cols=80; rows=3;></textarea>
-		<!-- cols=60 rows=10 -->
 	</div>
-	<!-- 	<div id="dateDiv"> -->
-	<!-- 		Date: <input type="text" id="datepicker"> -->
-	<!-- 	</div> -->
 
 	<div id="dateDiv">
 		<input type="text" name="basic_example_1" id="basic_example_1" size="26" /> <span id="repeat"> <input
