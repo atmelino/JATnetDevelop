@@ -90,6 +90,7 @@
 	var timer_is_on = 0;
 	var timeFactor = 1;
 	var animateCounter = 0;
+	var timerChanged = false;
 
 	function setup() {
 		// initialization
@@ -98,8 +99,9 @@
 		// animation loop / game loop
 		animate();
 
-		timedCount();
+		//timedCount();
 
+		timer50ms();
 	}
 
 	// FUNCTIONS 		
@@ -266,6 +268,7 @@
 		makeAxisLabel(scene, true);
 
 	}
+
 	function createSphere(radius, segments) {
 		return new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), new THREE.MeshPhongMaterial({
 			map : THREE.ImageUtils.loadTexture('../lib/images/earth-day2K.jpg'),
@@ -339,8 +342,49 @@
 		//earthSphereNight.rotation.y += 0.0001;
 		controls.update();
 		stats.update();
+		if (timerChanged) {
+			timerChanged = false;
+			//printlnMessage('messages', 'timer 50ms event ' + animateCounter++);
 
-		printlnMessage('messages', 'animate called '+animateCounter++);
+			// every 50 ms			
+
+			earthSphere.rotation.y += 0.0002;
+			clouds.rotation.y += 0.0002;
+			now = new Date();
+			//printlnMessage('messages', now.getTime());
+
+			if (animateCounter % 20 == 0) {
+				// Every second
+				//printlnMessage('messages', 'timer 50ms event ' + animateCounter / 20);
+				if (document.getElementById('cbLive').checked)
+					ex13.datetimepicker('setDate', (new Date()));
+
+				if (!document.getElementById('cbStop').checked) {
+					myDate = ex13.datetimepicker('getDate');
+					//printlnMessage('messages', myDate);
+					myUTC = myDate.getTime();
+					//printlnMessage('messages', myUTC);
+
+					//myDate.setTime(myUTC);
+					myDate.setTime(myUTC + timeFactor * 1000);
+
+					//myDate.setDate(myDate.getSeconds() + timeFactor);
+					ex13.datetimepicker('setDate', myDate);
+				}
+			}
+			animateCounter++;
+
+		}
+		//printlnMessage('messages', 'animate called ' + animateCounter++);
+
+	}
+
+	function timer50ms() {
+		timerChanged = true;
+
+		t50 = setTimeout(function() {
+			timer50ms()
+		}, 50);
 
 	}
 
@@ -421,43 +465,8 @@
 
 	}
 
-	function timedCount() {
-
-		if (document.getElementById('cbLive').checked)
-			ex13.datetimepicker('setDate', (new Date()));
-
-		if (!document.getElementById('cbStop').checked) {
-			myDate = ex13.datetimepicker('getDate');
-			//printlnMessage('messages', myDate);
-			myUTC = myDate.getTime();
-			printlnMessage('messages', myUTC);
-
-			//myDate.setTime(myUTC);
-			myDate.setTime(myUTC + timeFactor * 1000);
-
-			//myDate.setDate(myDate.getSeconds() + timeFactor);
-			ex13.datetimepicker('setDate', myDate);
-		}
-
-		t = setTimeout(function() {
-			timedCount()
-		}, 1000);
-	}
-
-	function doTimer() {
-		if (!timer_is_on) {
-			timer_is_on = 1;
-			timedCount();
-		}
-	}
-
-	function stopCount() {
-		clearTimeout(t);
-		timer_is_on = 0;
-	}
-
 	function rewind() {
-		printlnMessage('messages', 'rewind called');
+		//printlnMessage('messages', 'rewind called');
 
 		if (timeFactor > 1)
 			timeFactor = timeFactor / 2;
@@ -482,7 +491,7 @@
 	}
 
 	function forward() {
-		printlnMessage('messages', 'forward called');
+		//printlnMessage('messages', 'forward called');
 		if (timeFactor < -1)
 			timeFactor = timeFactor / 2;
 		else {
@@ -506,13 +515,6 @@
 	}
 
 	$(function() {
-		//$("#datepicker").datepicker();
-		//$("#datepicker").datepicker({
-		//showButtonPanel : true,
-		//});
-
-		//$("#datepicker").datepicker("setDate", new Date());
-
 		ex13 = $('#basic_example_1');
 
 		ex13.datetimepicker({
