@@ -162,13 +162,16 @@
 			raan : 10, // numeric slider
 			w : 10, // numeric slider
 			ta : 10, // numeric slider
-			add : makeOrbit,
+			add : sunPosition,
 			clear : clearOrbits,
 			autoRotate : false, // boolean (checkbox)
 			opacity : 0.8, // numeric slider
 			satScale : 400,
 			background : "Stars",
 		};
+
+		gui.add(parameters, 'add').name('Add Orbit');
+
 		var folder1 = gui.addFolder('Orbits');
 		folder1.add(parameters, 'a').min(6000).max(50000).step(1).name('Semimajor Axis [km]');
 		folder1.add(parameters, 'ecc').min(0).max(1).step(0.01).name('Eccentricity');
@@ -176,7 +179,7 @@
 		folder1.add(parameters, 'raan').min(0).max(180).step(0.1).name('RAAN');
 		folder1.add(parameters, 'w').min(0).max(180).step(0.1).name('Perigee');
 		folder1.add(parameters, 'ta').min(0).max(180).step(0.1).name('True Anomaly');
-		folder1.add(parameters, 'add').name('Add Orbit');
+		//folder1.add(parameters, 'add').name('Add Orbit');
 		folder1.add(parameters, 'clear').name('Clear Orbit(s)');
 		var satScale = folder1.add(parameters, 'satScale').min(1).max(1000).step(1).name('satellite scale').listen();
 		satScale.onChange(function(value) {
@@ -392,8 +395,10 @@
 		renderer.render(scene, camera);
 	}
 
-	function makeOrbit() {
+	function sunPosition() {
 		//console.log("clicked");
+		myDate = ex13.datetimepicker('getDate');
+		myUTC = myDate.getTime();
 		var SemimajorAxis = parameters.a;
 		var Eccentricity = parameters.ecc;
 		var Inclination = parameters.inc;
@@ -403,6 +408,7 @@
 		//console.log("SemimajorAxis=" + SemimajorAxis);
 
 		$.post('/JATnetDevelop/SunPosition', {
+			UTCms : myUTC,
 			SemimajorAxis : SemimajorAxis,
 			Eccentricity : Eccentricity,
 			Inclination : Inclination,
@@ -411,44 +417,13 @@
 			ta : ta,
 		}, function(responseText) {
 
-			printlnMessage('messages', 'clicked');
+			printlnMessage('messages', 'sunPosition clicked');
 
 			var obj = JSON.parse(responseText);
-			//printlnMessage('messages', JSON.stringify(obj));
-			//printlnMessage('messages', obj.coords.x[0]);
-			//printlnMessage('messages', JSON.stringify(obj.TBE));
+			printlnMessage('messages', "date=" + JSON.stringify(obj.UTCms));
 			printlnMessage('messages', "sun azimuth=" + JSON.stringify(obj.azimuth));
 			printlnMessage('messages', "sun altitude=" + JSON.stringify(obj.altitude));
-			console.log(JSON.stringify(obj.TBE));
-			console.log(JSON.stringify(obj.pos));
 
-			var lineGeometry = new THREE.Geometry();
-			var vertArray = lineGeometry.vertices;
-			for ( var i = 0; i < obj.coords.x.length; i++) {
-				//point = new THREE.Vector3(obj.coords.x[i], obj.coords.y[i], obj.coords.z[i]);
-				point = new THREE.Vector3(obj.coords.y[i], obj.coords.z[i], obj.coords.x[i]);
-				vertArray.push(point);
-			}
-			lineGeometry.computeLineDistances();
-			var lineMaterial = new THREE.LineBasicMaterial({
-				color : 0xcc0000,
-				linewidth : 3,
-			});
-			var index = lines.length;
-			//console.log("index=" + index);
-			lines[index] = new THREE.Line(lineGeometry, lineMaterial);
-			scene.add(lines[index]);
-
-			z = 1126.5079268573745;
-			y = 3989.067891143869;
-			x = 7340.005746153715;
-
-			x = parseInt(obj.pos.x);
-			y = parseInt(obj.pos.y);
-			z = parseInt(obj.pos.z);
-			console.log("x=" + x + " y=" + y);
-
-			satellite.position.set(y, z, x);
 			update();
 		});
 	}
@@ -459,10 +434,6 @@
 			console.log(lines[index]);
 			scene.remove(lines[index]);
 		}
-
-		// 		for (line in lines)
-		// 			scene.remove(line);
-
 	}
 
 	function rewind() {
