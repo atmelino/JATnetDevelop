@@ -15,20 +15,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 @WebServlet("/SunPosition")
 // defines a Servlet mapped to "/SunPosition"
 public class SunPosition extends HttpServlet {
 
 	private static final long serialVersionUID = -8693738797080608295L;
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
 
 		// Set response header
 		response.setContentType("text/html;UTF-8");
@@ -37,33 +35,32 @@ public class SunPosition extends HttpServlet {
 		// Text
 		PrintWriter writer = response.getWriter();
 
-		
-		long UTCms=Long.parseLong(request.getParameter("UTCms"));
-		
-		
+		long UTCms = Long.parseLong(request.getParameter("UTCms"));
+
 		AstroDateTimeLocation adt;
 		AstroCoordinate ac;
 
 		Angle longitude = new Angle(-97.733333, Angle.DEGREES);
-		Angle latitude = new Angle(30,17,0, Angle.ARCDEGREES);
-		adt = new AstroDateTimeLocation(2003, 3, 1, 0, 0, 0, "CST6CDT", longitude, latitude);
+		Angle latitude = new Angle(30, 17, 0, Angle.ARCDEGREES);
+		// adt = new AstroDateTimeLocation(2003, 3, 1, 0, 0, 0, "CST6CDT",
+		// longitude, latitude);
+
+		adt = new AstroDateTimeLocation(UTCms, "CST6CDT", longitude, latitude);
+
 		ac = SPA.getSolarPosition(adt, 1830.14, 67., 820., 11.);
-		double az=ac.horizontalCoord.azimuth.getDegrees();
-		double alt=ac.horizontalCoord.altitude.getDegrees();
-		
-		
-		
+		double az = ac.horizontalCoord.azimuth.getDegrees();
+		double alt = ac.horizontalCoord.altitude.getDegrees();
+
 		JSONObject obj = new JSONObject();
 
 		obj.put("message", "SunPosition.java");
 		obj.put("UTCms", UTCms);
-		obj.put("UTCDateTime", ""+adt.getUTCDateTime());
-		
+		obj.put("UTCDateTime", "" + adt.getUTCDateTime());
+
 		obj.put("azimuth", az);
 		obj.put("altitude", alt);
-		
-		
-		writer.write(""+obj);
+
+		writer.write("" + obj);
 
 		writer.close();
 

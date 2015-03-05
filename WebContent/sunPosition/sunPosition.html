@@ -285,13 +285,14 @@
 	}
 
 	function createClouds(radius, segments) {
-		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius * 1.01, segments, segments), new THREE.MeshPhongMaterial({
-			map : THREE.ImageUtils.loadTexture('../lib/images/earth-map-clouds2k.jpg'),
-			//				map : THREE.ImageUtils.loadTexture('images/earth-clouds2k.jpg'),
-			//map : THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
-			transparent : true,
-			opacity : 0.25,
-		}));
+		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius * 1.01, segments, segments),
+				new THREE.MeshPhongMaterial({
+					map : THREE.ImageUtils.loadTexture('../lib/images/earth-map-clouds2k.jpg'),
+					//				map : THREE.ImageUtils.loadTexture('images/earth-clouds2k.jpg'),
+					//map : THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
+					transparent : true,
+					opacity : 0.25,
+				}));
 	}
 
 	function createStars(radius, segments) {
@@ -406,6 +407,7 @@
 		var w = parameters.w;
 		var ta = parameters.ta;
 		//console.log("SemimajorAxis=" + SemimajorAxis);
+		printlnMessage('messages', "date sent" + myUTC);
 
 		$.post('/JATnetDevelop/SunPosition', {
 			UTCms : myUTC,

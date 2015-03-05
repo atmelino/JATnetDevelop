@@ -98,9 +98,18 @@ public class AstroDateTimeLocation {
 		this.localLatitude = localLatitude;
 	}
 
+	public AstroDateTimeLocation(long jSTime, String TZString, Angle localLongitude, Angle localLatitude) {
+		Chronology chrono = GregorianChronology.getInstance(DateTimeZone.forID(TZString));
+		this.localLongitude = localLongitude;
+		this.localLatitude = localLatitude;
+		this.localDateTime = new DateTime(jSTime, chrono);
+		convert();
+	}
+
 	public AstroDateTimeLocation(long jSTime, String TZString) {
 		Chronology chrono = GregorianChronology.getInstance(DateTimeZone.forID(TZString));
-		localDateTime = new DateTime(jSTime, chrono);
+		this.localDateTime = new DateTime(jSTime, chrono);
+		convert();
 	}
 
 	public DateTime getLocalDateTime() {
@@ -132,7 +141,7 @@ public class AstroDateTimeLocation {
 
 	public void advanceJD(double days) {
 		JD += days;
-		//convert();
+		// convert();
 	}
 
 	public Angle getGST() {
@@ -192,8 +201,8 @@ public class AstroDateTimeLocation {
 		}
 	}
 
-	//private void convertFromGST() {
-	//}
+	// private void convertFromGST() {
+	// }
 
 	private void julianDate() {
 
