@@ -98,6 +98,11 @@ public class AstroDateTimeLocation {
 		this.localLatitude = localLatitude;
 	}
 
+	public AstroDateTimeLocation(long jSTime, String TZString) {
+		Chronology chrono = GregorianChronology.getInstance(DateTimeZone.forID(TZString));
+		localDateTime = new DateTime(jSTime, chrono);
+	}
+
 	public DateTime getLocalDateTime() {
 		return localDateTime;
 	}

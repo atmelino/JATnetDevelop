@@ -57,7 +57,8 @@ public class SunPosition extends HttpServlet {
 
 		obj.put("message", "SunPosition.java");
 		obj.put("UTCms", UTCms);
-
+		obj.put("UTCDateTime", ""+adt.getUTCDateTime());
+		
 		obj.put("azimuth", az);
 		obj.put("altitude", alt);
 		

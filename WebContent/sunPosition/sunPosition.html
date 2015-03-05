@@ -421,6 +421,7 @@
 
 			var obj = JSON.parse(responseText);
 			printlnMessage('messages', "date=" + JSON.stringify(obj.UTCms));
+			printlnMessage('messages', "UTCDateTime=" + JSON.stringify(obj.UTCDateTime));
 			printlnMessage('messages', "sun azimuth=" + JSON.stringify(obj.azimuth));
 			printlnMessage('messages', "sun altitude=" + JSON.stringify(obj.altitude));
 
