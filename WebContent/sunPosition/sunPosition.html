@@ -187,6 +187,18 @@
 		});
 		//gui.add(parameters, 'autoRotate').name('autoRotate');
 
+		gui2 = new dat.GUI();
+		//gui2.name("Astronomical Data");
+		parameters2 = {
+			azimuth : 12000, // numeric
+			ecc : 0.3, // numeric slider
+		};
+		gui2.add(parameters2	, 'azimuth').name('Azimuth');
+
+		
+		
+		
+		
 		var folder2 = gui.addFolder('Effects');
 
 		autoRotateCB = folder2.add(parameters, 'autoRotate').name('Rotate Scene').listen();
