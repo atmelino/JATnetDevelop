@@ -187,18 +187,6 @@
 		});
 		//gui.add(parameters, 'autoRotate').name('autoRotate');
 
-		gui2 = new dat.GUI();
-		//gui2.name("Astronomical Data");
-		parameters2 = {
-			azimuth : 12000, // numeric
-			ecc : 0.3, // numeric slider
-		};
-		gui2.add(parameters2	, 'azimuth').name('Azimuth');
-
-		
-		
-		
-		
 		var folder2 = gui.addFolder('Effects');
 
 		autoRotateCB = folder2.add(parameters, 'autoRotate').name('Rotate Scene').listen();
@@ -230,6 +218,15 @@
 		});
 
 		gui.open();
+
+		gui2 = new dat.GUI();
+		//gui2.name("Astronomical Data");
+		parameters2 = {
+			azimuth : 0.0, // numeric
+			altitude : 0.0, // numeric
+		};
+		gui2.add(parameters2, 'azimuth').name('Azimuth &deg');
+		gui2.add(parameters2, 'altitude').name('Altitude &deg');
 
 		// SPACEBOX
 		var imagePrefix = "../lib/images/nebula-";
@@ -297,14 +294,13 @@
 	}
 
 	function createClouds(radius, segments) {
-		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius * 1.01, segments, segments),
-				new THREE.MeshPhongMaterial({
-					map : THREE.ImageUtils.loadTexture('../lib/images/earth-map-clouds2k.jpg'),
-					//				map : THREE.ImageUtils.loadTexture('images/earth-clouds2k.jpg'),
-					//map : THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
-					transparent : true,
-					opacity : 0.25,
-				}));
+		return new THREE.Mesh(new THREE.SphereGeometry(earthRadius * 1.01, segments, segments), new THREE.MeshPhongMaterial({
+			map : THREE.ImageUtils.loadTexture('../lib/images/earth-map-clouds2k.jpg'),
+			//				map : THREE.ImageUtils.loadTexture('images/earth-clouds2k.jpg'),
+			//map : THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
+			transparent : true,
+			opacity : 0.25,
+		}));
 	}
 
 	function createStars(radius, segments) {
@@ -387,9 +383,10 @@
 					//myDate.setDate(myDate.getSeconds() + timeFactor);
 					ex13.datetimepicker('setDate', myDate);
 				}
+				sunPosition();
+				gui2.azimuth=animateCounter;
 			}
 			animateCounter++;
-
 		}
 		//printlnMessage('messages', 'animate called ' + animateCounter++);
 
@@ -558,7 +555,7 @@
 </head>
 <body onLoad="setup();">
 	<div id='messagesDiv'>
-		<textarea id="messages" cols=80; rows=3;></textarea>
+		<textarea id="messages" cols=60; rows=3;></textarea>
 	</div>
 
 	<div id="dateDiv">
