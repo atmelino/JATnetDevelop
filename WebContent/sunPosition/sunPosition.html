@@ -73,7 +73,7 @@
 	//var radius = 100;
 	//var gridSize = 200;
 	var parameters;
-	var gui;
+	var gui,gui2;
 	var zUpVec = [ 0, 0, 0 ];
 	var autoRotateCB;
 	var earthSphere;
@@ -225,8 +225,8 @@
 			azimuth : 0.0, // numeric
 			altitude : 0.0, // numeric
 		};
-		gui2.add(parameters2, 'azimuth').name('Azimuth &deg');
-		gui2.add(parameters2, 'altitude').name('Altitude &deg');
+		gui2.add(parameters2, 'azimuth').name('Azimuth &deg').listen();
+		gui2.add(parameters2, 'altitude').name('Altitude &deg').listen();
 
 		// SPACEBOX
 		var imagePrefix = "../lib/images/nebula-";
@@ -385,6 +385,7 @@
 				}
 				sunPosition();
 				gui2.azimuth=animateCounter;
+				gui2.altitude=0.7;
 			}
 			animateCounter++;
 		}
