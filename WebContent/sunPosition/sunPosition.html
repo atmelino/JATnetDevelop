@@ -40,6 +40,7 @@
 <script src="../lib/js/extra/axisLabels.js"></script>
 <script src="../lib/js/extra/colors.js"></script>
 <script src="../lib/js/extra/functions.js"></script>
+<script src="../lib/js/extra/sprintf.js"></script>
 
 <!-- Coordinate order has been changed to reflect OpenGL default: -->
 <!-- first coordinate is y -->
@@ -73,7 +74,8 @@
 	//var radius = 100;
 	//var gridSize = 200;
 	var parameters;
-	var gui,gui2;
+	var parameters2;
+	var gui, gui2;
 	var zUpVec = [ 0, 0, 0 ];
 	var autoRotateCB;
 	var earthSphere;
@@ -91,6 +93,7 @@
 	var timeFactor = 1;
 	var animateCounter = 0;
 	var timerChanged = false;
+	var azimuth = 0.345;
 
 	function setup() {
 		// initialization
@@ -384,8 +387,14 @@
 					ex13.datetimepicker('setDate', myDate);
 				}
 				sunPosition();
-				gui2.azimuth=animateCounter;
-				gui2.altitude=0.7;
+				//gui2.azimuth=animateCounter;
+				//gui2.altitude=0.7;
+				//parameters2.altitude = animateCounter;
+
+				parameters2.azimuth = azimuth;
+				//parameters2.azimuth = obj.azimuth;
+				parameters2.altitude = animateCounter;
+
 			}
 			animateCounter++;
 		}
@@ -436,6 +445,15 @@
 			printlnMessage('messages', "UTCDateTime=" + JSON.stringify(obj.UTCDateTime));
 			printlnMessage('messages', "sun azimuth=" + JSON.stringify(obj.azimuth));
 			printlnMessage('messages', "sun altitude=" + JSON.stringify(obj.altitude));
+
+			saz1 = JSON.stringify(obj.azimuth);
+			//saz=sprintf("%5.3f", obj.azimuth);
+			saz = sprintf("%5.3f", parseFloat(JSON.stringify(obj.azimuth)));
+
+			//parameters2.azimuth = saz1;
+			parameters2.azimuth = parseFloat(JSON.stringify(obj.azimuth));
+			//parameters2.azimuth = obj.azimuth;
+			parameters2.altitude = animateCounter;
 
 			update();
 		});
