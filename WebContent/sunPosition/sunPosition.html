@@ -225,8 +225,9 @@
 		gui2 = new dat.GUI();
 		//gui2.name("Astronomical Data");
 		parameters2 = {
-			azimuth : 0.0, // numeric
-			altitude : 0.0, // numeric
+				azimuth : "14.765", 
+				//azimuth : 0.0, // numeric
+			altitude : "0.0", 
 		};
 		gui2.add(parameters2, 'azimuth').name('Azimuth &deg').listen();
 		gui2.add(parameters2, 'altitude').name('Altitude &deg').listen();
@@ -387,13 +388,10 @@
 					ex13.datetimepicker('setDate', myDate);
 				}
 				sunPosition();
-				//gui2.azimuth=animateCounter;
-				//gui2.altitude=0.7;
-				//parameters2.altitude = animateCounter;
 
-				parameters2.azimuth = azimuth;
-				//parameters2.azimuth = obj.azimuth;
-				parameters2.altitude = animateCounter;
+				//parameters2.azimuth = azimuth;
+				//parameters2.azimuth = 12.34;
+				//parameters2.altitude = animateCounter;
 
 			}
 			animateCounter++;
@@ -453,7 +451,8 @@
 			//parameters2.azimuth = saz1;
 			parameters2.azimuth = parseFloat(JSON.stringify(obj.azimuth));
 			//parameters2.azimuth = obj.azimuth;
-			parameters2.altitude = animateCounter;
+			//parameters2.altitude = animateCounter;
+			parameters2.altitude = parseFloat(JSON.stringify(obj.altitude));
 
 			update();
 		});
